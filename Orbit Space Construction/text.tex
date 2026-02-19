@@ -1,0 +1,265 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx} % insertar imatges
+\usepackage{amsmath, amssymb, amsthm} % matemàtiques
+\usepackage{hyperref} % índex amb links
+\usepackage[a4paper, total={6in, 8in}]{geometry} % marges
+
+
+\setlength\parindent{0pt}
+
+% Theorems
+\theoremstyle{plain}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{exercise}{Exercise}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{observation}{Observation}[section]
+
+
+% Commands
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\M}{\mathbb{M}}
+\newcommand{\de}{\text{d}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Sp}{\mathbb{S}}
+
+\title{\textbf{A construction of the Orbit space of a Hamiltonian dynamical system}}
+\author{Bernat Puigvert Jutglar}
+\date{December 2025}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Introduction}
+
+In classical mechanics, it is commonly said that every possible state of a mechanical (hamiltonian) system corresponds to a point of the phase space.\\
+
+The phase space of a hamiltonian system with $n$ degrees of freedom \footnote{Formally defined as a $2n$-dimensional symplectic manifold endowed with a closed, non-degenerate 2-form} has dimension $2n$, meaning that in order to fully describe a point in such space, $2n$ coordinates are needed. We represent a point in the phase space $\M$ (which, for simplicity's sake, can be understood to be $\R^{2n}$, or a space that locally resembles $\R^{2n}$) as 
+$$\mathbf{z} = (\mathbf{q},\mathbf{p})\in\M,$$
+where each $\mathbf{q}$ and $\mathbf{p}$ is a $n$-dimensional vector. The $\mathbf{q}$ vector encodes the \textit{generalized positions} of the system, while $\mathbf{p}$ represents its \textit{generalized momenta}.\\
+
+The time evolution of a mechanical system is given by the \textit{Hamiltonian equations}: a set of $2n$ first order partial differential equations involving the \textit{Hamiltonian} $H$ (a fundamental quantity in physics, the Legendre transform of the \textit{Lagrangian}). Such equations are 
+$$\dot{\mathbf{q}} = \frac{\partial H}{\partial \mathbf{p}},\quad \dot{\mathbf{p}} = -\frac{\partial H}{\partial \mathbf{q}}.$$
+
+They can be written in a more compact way. Let $J$ be the \textit{elemental symplectic matrix} $$J = \begin{bmatrix}
+    0 & \text{Id}_{n}\\
+    -\text{Id}_{n} & 0
+\end{bmatrix}.$$
+Then, given a point of the phase space $\mathbf{z}\in\M$, its time evolution in the phase space, given by the Hamiltonian equations, can be written as 
+$$\dot{\mathbf{z}} = J\nabla_{\mathbf{z}}H(\mathbf{z},t) \equiv X_{H}(\mathbf{z}),$$ where $X_H$ is the most common way of referring to $J\nabla_{\mathbf{z}}H(\mathbf{z},t)$, the \textit{Hamiltonian vector field}.\\
+
+Therefore, given an initial time $t_0\in\R$ and an initial position $\mathbf{z}_0\in\M$, the time evolution of the physical state $\mathbf{z}_0$ can be determined by solving the Cauchy problem 
+$$\begin{cases}
+    \dot{\mathbf{z}} = X_H(\mathbf{z}(t),t)\\
+    \mathbf{z}(t_0) = \mathbf{z}_0
+\end{cases}$$
+
+By the Picard–Lindelöf theorem \cite{coddington1955theory}, as long as $X_H$ is a locally Lipschitz vector field (a condition satisfied if, for example, $H$ is $C^1$), there exists a unique solution to the given Cauchy problem. The regularity of $H$ is not a problem when dealing with physical systems: $H$ is essentially always a $C^\infty$ function.\\
+
+What we have just outlined is the precise reason as to why a set of $2n$ constants (the coordinates of a point $\mathbf{z}_0\in\M$) is enough to determine the full time evolution of a mechanical system.
+
+\section{The Phase space. Useful concepts}
+
+As suggested in the introduction, the time evolution of a mechanical system can be understood as a curve in the phase space, a \textit{mechanical trajectory}. It is convenient for us to define these concepts.
+
+\begin{definition}
+    Given an open interval $I\subseteq \R$, a \textup{mechanical trajectory} is a $C^1$ map $\gamma\colon I\to \M$ satisfying the Hamiltonian equations, namely $\dot{\gamma}(t) = X_H(\gamma(t))$ for every $t\in I$.
+\end{definition}
+
+Using this definition, the discussion in the introduction can be synthesized in the form of the following proposition.
+
+\begin{proposition}\label{uniq}
+    For every $\mathbf{z}\in\M$, there exists a unique mechanical trajectory $\gamma_\mathbf{z}$, satisfying $\gamma_\mathbf{z}(0) = \mathbf{z}$ and $\dot{\gamma}_\mathbf{z}(t) = X_H(\gamma_\mathbf{z}(t))$.
+\end{proposition}
+
+Given a vector field, it is only natural to consider its \textit{flux}. The case of the Hamiltonian vector field is no different.
+
+\begin{definition}
+    Given an open interval $I\subseteq \R$, the function 
+    \begin{align*}
+        \psi\colon I\times\M &\longrightarrow\M \\
+        (t,\mathbf{z}) &\longmapsto \gamma_\mathbf{z}(t)
+    \end{align*}
+    is called the \textup{Hamiltonian flux}.
+\end{definition}
+
+In this sense, the Hamiltonian flux describes the full time evolution of a mechanical system, in terms of its phase space. Notice that, for a fixed time $t\in\R$, the Hamiltonian flux $\psi_t\colon \M\to\M$ maps the phase space to itself (it is in fact a diffeomorphism\footnote{It is, even more accurately, a \textit{symplectomorphism}}), outputting the phase space of the system after time $t$.\\
+
+It is clear that points in $\M$ that belong to the same mechanical trajectory are related. This is the concept of the orbit of a point.
+
+\begin{definition}
+    Given a point $\mathbf{z}\in\M$, we define its \textup{orbit} as the set of points $$\mathcal{O}_\mathbf{z} = \{\gamma_\mathbf{z}(t)\ \vert\ t\in\R\}\subseteq \M.$$
+\end{definition}
+
+Notice that orbits yields a \textit{partition} of the phase space.
+
+\section{The Orbit space}
+
+After reflecting on the concept of the orbit of a point, one can come to the realization that, by identifying a single point with each orbit, we are selecting the distinctive information of such a point. In a way, we can identify most of the information of the system (by disregarding time) in a subset of the phase space: the \textit{Orbit space} $\mathcal{O}_\M$. Let's take a look at a way it can be constructed.\\
+
+We want to identify each orbit with a single point. This can be achieved through he following equivalence relation. Let $\mathbf{x},\mathbf{y}\in\M$. We will say that $\mathbf{x}$ and $\mathbf{y}$ are related ($\mathbf{x}\sim\mathbf{y}$) if there exists a $t\in\R$ such that $\mathbf{y} = \gamma_\mathbf{x}(t)$.
+
+\begin{proposition}
+    $\sim$ is an equivalence relation.
+\end{proposition}
+\begin{proof}
+    It is reflexive, since every $\mathbf{x}\in\M$ satisfies $\mathbf{x} = \gamma_\mathbf{x}(0)$ and therefore $\mathbf{x}\sim\mathbf{x}$. It is symmetric, since if $\mathbf{x}\sim\mathbf{y}$, namely if there exists a $t\in\R$ such that $\mathbf{y} = \gamma_\mathbf{x}(t)$, then $\mathbf{x} = \gamma_{\mathbf{y}}(-t)$, meaning that $\mathbf{y}\sim\mathbf{x}$. Finally, it is transitive: if $\mathbf{x},\mathbf{y},\mathbf{z}\in\M$ and $\mathbf{x}\sim \mathbf{y}$ ($\mathbf{y} = \gamma_\mathbf{x}(t_1)$) and $\mathbf{y}\sim\mathbf{z}$ ($\mathbf{z} = \gamma_\mathbf{y}(t_2)$), then $\mathbf{z} = \gamma_\mathbf{\gamma_{\mathbf{x}(t_1)}}(t_2) = \gamma_\mathbf{x}(t_1 + t_2)$.
+\end{proof}
+
+We can then understand the Orbit space as the quotient set of the phase space under $\sim$, namely $\mathcal{O}_\M = \M/\sim$. In this sense, the Orbit space is the space of all mechanical trajectories seen as purely geometrical objects: they are time-independent.
+
+\subsection{Geometrical interpretation of the Orbit space}
+
+We have introduced the Orbit space from the intuition that the time information in the phase space can be discarted in order to obtain a space that only contains the possible mechanical states of a given system. This is, in fact, a particular case of a general geometrical construction: the \textit{foliation} of a smooth manifold.
+
+\begin{definition}
+    Let $M$ be a smooth manifold of dimension $n$. A $p$-\textup{foliation} on $M$ is a decomposition of $M$ into disjoint connected subsets called \textup{leaves}, such that for every point $p\in\M$ there exists a coordinate chart $$(U,\varphi),\quad \varphi\colon U\to \R^p\times R^{n-p},$$ with the property that, in these coordinates, the leaves intersecting $U$ are exactly the sets $$\R^p\times\{\textup{constant}\}.$$
+\end{definition}
+
+The mentioned property of the coordinate chart is analogous to saying that, locally, the manifold resembles a product, and the leaves are the $p$-dimensional "slices" of that product.\\
+
+Because of Proposition \ref{uniq}, the set of mechanical trajectories is disjoint. Notice that the image of each $\gamma_\mathbf{z}\colon I\to\R$ is connected ($I$ is connected, and $\gamma_\mathbf{z}$ is continuous).\\
+
+Also, notice that any smooth vector field $F$ on $\M$ (for instance, the Hamiltonian vector field) associates a well defined direction to each point \footnote{Points with $F(p) = 0$ are called \textit{singular}, vector fields with singular points induce \textit{singular foliations}}. Since the vector field is smooth (in particular, continuous), nearby points have similar associated directions. This is the informal reason as to why the (local product resemblance) property mentioned in the definition of foliation is satisfied.\\
+
+Since the Hamiltonian vector field is smooth, and every mechanical trajectory is a $1$-dimensional set of points in $\M$, we can conclude that $X_H$ induces a $1$-foliation in $\M$. The set of leaves of the foliation is precisely the Orbit space.
+
+\section{Examples}
+
+We will now compute the Orbit space of certain mechanical systems, which will help create a better understanding (and expose beautiful mathematics).
+
+\subsection{The 1D harmonic oscillator}
+
+Consider a harmonic oscillator with 1 degree of freedom, namely, a particle of mass $m = 1$ under the action of a potential of the form $V(q) = \frac{k}{2}q^2$ (we choose $k = 1$)\footnote{The choice of $m$ and $k$ is done without loss of generality, as every case can be reduced to the discussed one via a canonical transformation.}, where $q$ is the generalized coordinate of the system (and $p$ is generalized momentum). The phase space in this example is $\R^2$. The Hamiltonian of the system can be written as 
+$$H(q,p) = \frac{1}{2}\left(q^2 + p^2\right) = E,$$ where $E$ is the energy of the system. The Hamiltonian vector field is 
+$$X_H \begin{bmatrix}
+    q\\
+    p
+\end{bmatrix} = \begin{bmatrix}
+    \frac{\partial H}{\partial p}\\
+    -\frac{\partial H}{\partial q}
+\end{bmatrix} = \begin{bmatrix}
+    p\\
+    -q
+\end{bmatrix},$$ with mechanical trajectories being $$\begin{bmatrix}
+    q(t)\\
+    p(t)
+\end{bmatrix} = \begin{bmatrix}
+    \cos t & \sin t\\
+    -\sin t & \cos t
+\end{bmatrix}\begin{bmatrix}
+    q_0\\
+    p_0
+\end{bmatrix},$$ with the Hamiltonian flow being $\psi(t,(q,p)) = \left(q\cos t + p\sin t, -q\sin t + p\cos t\right)$. This shows that $\psi(t,\cdot)$ acts\footnote{The choice of words is not arbitrary: the Hamiltonian flow is a group action on the phase space.} on the phase space $\R^2$ as a rotation.\\
+
+The trajectory of a point $(q_0,p_0)$ is confined in the energy level $H = E$. This can be interpreted geometrically by noting that $\psi$ is a rotation, meaning that the norm of vectors is conserved. This means that $$q_0^2 + p_0^2 = q(t)^2 + p(t)^2 = 2E,$$ for every $t\in \R$. Albeit, $$\mathcal{O}_{(q_0,p_0)} = \{q(t)^2 + p(t)^2 = 2E\ |\ t\in\R\},$$ so each orbit is a circle of radius $\sqrt{2E} = \sqrt{q_0^2 + p_0^2}$.\\
+
+We will now see what the Orbit space of the 1D harmonic oscillator looks like. Before doing this, we will mention a technicality. Notice that the point $(0,0)$ of the phase space is pathological. Since the Hamiltonian vector field is null at that point, this is an example of a singular point. Once we build the foliation of the phase space, $(0,0)$ corresponds to a $0$-dimensional leaf, instead of a $1$-dimensional leaf. In order to avoid technical problems, we will, from now on,  consider the phase space without its origin $\M' = \R^2\setminus\{(0,0)\}$.\\
+
+Let us define 
+\begin{align*}
+    f\colon \M' &\longrightarrow (0,\infty)\\
+    (q,p)&\longmapsto \sqrt{q^2 + p^2}
+\end{align*} With this in mind, two points $\mathbf{x}\sim \mathbf{y}$ if, and only if, $\mathbf{y} = \psi_t(\mathbf{x})$ for some $t$, which is the same as imposing that $f(\mathbf{x}) = f(\mathbf{y})$. In this sense, $f$ is constant on orbits and separates them, hence it induces a bijection 
+\begin{align*}
+    \overline{f}\colon \M'/\sim &\longrightarrow (0,\infty)\\
+    [(q,p)]&\longmapsto \sqrt{q^2 + p^2}
+\end{align*} which is continuous because $f$ is ant $f = \overline{f} \circ \pi$, where $\pi$ is the quotient map. Finally, a continuous inverse is given by
+\begin{align*}
+    (0,\infty)\ &\xrightarrow{}\ \ \ \M'\ \ \xrightarrow{\pi} \ \ \M'/\sim\\
+    r\ \  &\mapsto\ (r,0)\  \mapsto\ \ [(r,0)]
+\end{align*}
+
+We have successfully proved that the orbit space $\mathcal{O}_\M = \M'/\sim$ is homeomorphic to $(0,\infty)$. This shows that every possible distinct state of the system can be determined by only one parameter: energy (the radius of the orbit circle).
+
+\subsection{The isotropic 2D harmonic oscillator}
+
+Let's discuss the isotropic harmonic oscillator on two degrees of freedom. The adjective isotropic here means that the frequency in which the particle will oscillate are the same regardless of the direction of movement. The phase space is $\R^4$. Without loss of generality, the Hamiltonian of the system can be written as $$H(q_1,q_2,p_1,p_2) = \frac{1}{2}\left(q_1^2 + p_1^2 + q_2^2 + p_2^2\right).$$
+
+The Hamiltonian field and the mechanical trajectories are the following.
+
+$$X_H \begin{bmatrix}
+    q_1\\
+    q_2\\
+    p_1\\
+    p_2
+\end{bmatrix} = \begin{bmatrix}
+    \frac{\partial H}{\partial p_1}\\
+    \frac{\partial H}{\partial p_2}\\
+    -\frac{\partial H}{\partial q_1}\\
+    -\frac{\partial H}{\partial q_2}
+\end{bmatrix} = \begin{bmatrix}
+    p_1\\
+    p_2\\
+    -q_1\\
+    -q_2
+\end{bmatrix}$$
+$$\begin{bmatrix}
+    q_1(t)\\
+    q_2(t)\\
+    p_1(t)\\
+    p_2(t)
+\end{bmatrix} = \begin{bmatrix}
+    \cos t & 0 &\sin t & 0\\
+    0 & \cos t & 0 &\sin t\\
+    -\sin t & 0 & \cos t &0\\
+    0 &-\sin t & 0 & \cos t
+\end{bmatrix}\begin{bmatrix}
+    q_1(0)\\
+    q_2(0)\\
+    p_1(0)\\
+    p_2(0)
+\end{bmatrix}$$\\
+
+In order to simplify the form of the Hamiltonian flux, it will be useful to introduce complex coordinates. Let \begin{align*}
+    z_1 &= q_1 + ip_1\\
+    z_2 &= q_2 + ip_2
+\end{align*} Working in coordinates $(z_1,z_2)$ instead of $(q_1,q_2,p_1,p_2)$, the phase space is $\mathbb{C}^2$ and the flux becomes $$\psi(t,(z_1,z_2)) = \left(e^{it}z_1(0), e^{it}z_2(0)\right).$$
+Yet again, the flux is nothing but a rotation in a space of $4$ dimensions. Notice that the phase of the rotation (the argument of the exponential function) is the same for both complex coordinates. This is due to the fact that the oscillator is isotropic: the flux is a rotation of global phase.\\
+
+Now, every energy level is confined in the region where $H = E$, described by the equation $$H = \frac{1}{2}\left(|z_1|^2 + |z_2|^2\right)\ \longrightarrow\ |z_1|^2 + |z_2|^2 = 2E.$$
+This shows that every energy level is a copy of $\Sp^3$, a $3$-dimensional sphere. Here comes the difference with respect to the 1D harmonic oscillator: each mechanical trajectory is a circle $\Sp^1$, inside of the constant energy region $\Sp^3$. In differential topology, it is said that every mechanical trajectory is a \textit{fiber} of $\Sp^3$. Indeed, for a point $(z_1,z_2)\in\Sp^3$, its orbit is $$\mathcal{O}_{(z_1,z_2)} = \{\left(e^{it}z_1, e^{it}z_2\ |\ t\in\R\right)\}.$$
+
+The next step is to determine the Orbit space, which is the quotient $\M/\sim$. Since we are studying the mechanics for a given energy level, we will restrict ourselves to a $\Sp^3$ for our phase space. Notice that the action of the flow is periodic: two times separated by a multiple of $2\pi$ give the same point. When this happens, we say that the action descends to $$\R\ \to\ \R/2\pi\mathbb{Z}\ \cong\ \Sp^1.$$ All in all, we are not identifying all times, we are only identifying times in the same phase.\\
+
+Therefore, the computation of the orbit space has been reduced to the computation of the quotient $\Sp^3/\Sp^1$. This can be done with the use of a very famous differential topology object: the \textit{Hopf fibration}.\\
+
+Let us define the \textit{Hopf map} as 
+\begin{align*}
+    h\colon\qquad \Sp^3\ &\longrightarrow\ \Sp^2\\
+    (z_1,z_2)\ &\longmapsto\ \left(2\,\mathrm{Re}[z_1\overline{z}_2], 2\,\mathrm{Im}[z_1\overline{z}_2], |z_1|^2 - |z_2|^2\right)
+\end{align*}
+
+It has some key properties, which we will not prove:
+\begin{enumerate}
+    \item \underline{Fibers are circles}. For any $p\in\Sp^3$, the preimage $h^{-1}(p)$ is exactly on $\Sp^1$ orbit
+    \item \underline{Invariance under $\psi$}. $h(e^{i\theta}\cdot(z_1,z_2)) = h(z_1,z_2)$, meaning that $h$ is constant along orbits.
+    \item It is \underline{surjective} and \underline{smooth}.
+\end{enumerate}
+
+Because $h$ is constant on orbits, there exists a unique continuous map $$\overline{h}\colon \Sp^3/\Sp^1\ \longrightarrow\ \Sp^3,$$ such that $h = \overline{h}\circ \pi$, where $\pi$ is the projection morphism. One can check that $\overline{h}$ is bijective. In order to prove that it is a homeomorphism, let us use the following result from topology.
+
+\begin{proposition}
+    A continuous bijection from a compact space to a Hausdorff space is a homeomorphism.
+\end{proposition}
+
+Since $\Sp^3$ is compact, it follows that $\overline{h}$ is a homeomorphism, so $\mathbf{\Sp}^3/\Sp^1 \cong \Sp^2$.\\
+
+Coming back to the physics, we have proved that the Orbit space of the two dimensional isotropic harmonic oscillator is a sphere, dependant on the energy of the system.
+
+\section{Conclusion and recommendations}
+
+This has been a glimpse into the vast world of geometrical physics. The relationship between geometry/topology and physics is immaculate, as it connects beautiful pieces of mathematics (that may apparently seem absurdly abstract, such as the Hopf fibration) with real physics scenarios, for which the human mind has a natural intuition.\\
+
+I strongly recommend any reader that is not familiar with the Hopf fibration to look it up on the internet and get lost with the brilliant animations (and explanations) that mathematicians have put out there for us to enjoy.
+
+\bibliographystyle{plain}
+\bibliography{References}
+
+\end{document}
