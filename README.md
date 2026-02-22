@@ -14,3 +14,7 @@ As it turns out, this is a more general geometrical construction on differential
 Stirling's formula is an asymptotic approximation for the factorial function. This paper presents a proof of Stirling's formula that uses only elementary tools from analysis. It includes an introduction to the Gamma function, as well as a non–measure-theoretic proof of the Dominated Convergence Theorem.
 
 I wrote this in Jyväskylä, Finland, as part of a science talent program called Joves per la Ciència, organized by Fundació La Pedrera.
+
+## Notes on undergraduate topics
+
+Notes of undergraduate courses I have taken. It currently includes notes on an introductory electromagnetism course (in catalan) and a real analysis course, focused on operator theory (in catalan). 
