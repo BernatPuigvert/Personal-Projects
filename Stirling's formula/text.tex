@@ -1,0 +1,366 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{natbib}
+\usepackage{xcolor}
+
+\title{\textbf{An elementary proof of \hspace{50mm}Stirling's Formula}}
+\author{Bernat Puigvert Jutglar }
+\date{August 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+\noindent Stirling's formula or Stirling's approximation is an expression that estimates values for large factorial numbers. Formally, Stirling's formula is an expression $S(n)$ that satisfies $$\lim_{n\to\infty}\frac{n!}{S(n)}=1.$$ This means that $S(n)$ is an asymptotic estimate for $n!$ or, in other words, that $S(n)$ grows as rapidly as $n!$ as $n$ tends to infinity. Abraham de Moivre (1667--1754) was a French mathematician who, amongst several other highly relevant results, proved that $$S(n)=C\sqrt{n}\bigg(\frac{n}{e}\bigg)^n$$ where $C$ is a numerical constant \cite{r3}. It was James Stirling (1692--1770) who completed de Moivre's work by proving that $C=\sqrt{2\pi}$, consequently proving that $$\lim_{n\to\infty}\frac{n!}{\sqrt{2\pi n}\big(\frac{n}{e}\big)^n}=1.$$ This result, which was named after Stirling, is of importance in several fields of science, such as mathematical analysis, probability theory, statistics and in both classical and quantum mechanics. This report aims to present a proof of Stirling's Formula that uses only elementary analysis tools and is simple to follow.
+
+\section{The Gamma Function $\Gamma$}
+The Gamma Function $\Gamma$ is a transcendental special function that was first introduced by Leonhard Euler (1703--1783). Because of its significance in mathematical analysis, several renowned mathematicians like Christian Goldbach (1690--1764),  Daniel Bernoulli (1700-1782), Adrien Marie Legendre (1752--1833), Carl Friedrich Gauss (1777--1855) and Karl Weierstrass (1815--1897) contributed to its study and development. The Gamma Function $$\Gamma(x)=\int_0^\infty t^{x-1}e^{-t}dt$$ serves the purposes of extending the definition of the factorial function to the real numbers\footnote{In reality, the Gamma Function extends the factorials to the complex numbers. For simplicity's sake, this essay will not include complex analysis topics.}.
+
+\vspace{3mm}
+
+\noindent {\bf Theorem 2.1.} \textit{For all} $n\geq0$ $$n!=\int_0^\infty x^ne^{-x}dx.$$
+
+\noindent \textit{Proof.} The proof is simply carried out by inducting on $n$. Let's first consider the base case $n=0$. $$\int_0^\infty e^{-x}=-\frac{1}{e^x}\bigg|_0^\infty=1$$ By definition, we know $0!=1$. Now assume the equality holds for an arbitrary $n\geq0$ and notice that this implies that the equality is true for $n+1$. Solving the following integral using integration by parts completes the proof. $$\int_0^\infty x^{n+1}e^{-x}dx$$ Let $u=x^{n+1}$ and $dv=e^{-x}dx$. Differentiate and integrate respectively to see that $du=(n+1)x^n$ and $v=-e^{-x}$. Using integration by parts, we obtain the following:
+
+\begin{align*}
+    \int_0^\infty x^{n+1}e^{-x}dx&= uv\bigg|_0^\infty-\int_0^\infty vdu\\
+&=\frac{-x^{n+1}}{e^{x}}\bigg|_{0}^\infty +\int_0^\infty (n+1)x^ne^{-x}dx \\
+&=\lim_{p\to \infty}\frac{-p^{n+1}}{e^{p}}-0+(n+1)\int_0^\infty x^ne^{-x}dx\\
+&= 0+(n+1)n! \\
+&= (n+1)!
+\end{align*}
+    
+\noindent The last step is a direct consequence of the recursivity of factorial numbers, as it is clear that $n!=n(n-1)!$.
+\qed
+
+\vspace{3mm}
+
+\noindent Notice that the Gamma Function differs from the expression we have proven in Theorem 2.1. The following identity establishes the relation between the two expressions\footnote{It is unclear why the Gamma Function is defined in such a way. A discussion on the historical reasons as to why this is the case is included in \cite{r1}.}.
+
+$$n!=\Gamma(n+1).$$
+
+\noindent The similarities between the graph of the family of functions $f_n(x)=x^ne^{-x}$ and the bell curves from probability theory \cite{r2} motivate us to make a change of variables that allows us to prove the following lemma.
+
+\vspace{3mm}
+
+\noindent {\bf Lemma 2.2} \textit{For all} $n\geq 0$ $$\frac{ n!\hspace{1mm}e^n}{n^n\sqrt{n}}=\int_{-\sqrt{n}}^\infty \bigg( 1+\frac{t}{\sqrt{n}}\bigg)^ne^{-\sqrt{n}t}dt.$$ 
+
+\noindent \textit{Proof.} Consider the identity proved in Theorem 2.1.
+
+$$n!=\int_0^\infty x^ne^{-x}dx.$$
+
+\noindent Now consider the following change of variables. Let $t=(x-n)/\sqrt{n}$. Differentiating both sides lets us see that $dx=\sqrt{n} dx$. As $x\to0$, we see that $t\to -\sqrt{n}$. It is also clear that as $x\to \infty$, $t\to \infty$. Now factor and rearrange the terms independent from $t$ to complete the proof. 
+\begin{align*}
+       n!&=\int_{-\sqrt{n}}^\infty (\sqrt{n}t+n)^ne^{-(\sqrt{n}t+n)}\sqrt{n}dt \\
+&=\frac{n^n\sqrt{n}}{e^n}\int_{-\sqrt{n}}^\infty \bigg( 1+\frac{t}{\sqrt{n}}\bigg)^ne^{-\sqrt{n}t}dt
+\end{align*}
+\qed
+
+\vspace{3mm}
+
+\noindent Notice that the expression proved in Lemma 2.2 includes nearly all the terms that appear in Stirling's formula. The next step of the prove relies on analysing the convergence of the following improper integral 
+
+$$\int_{-\sqrt{n}}^\infty \bigg( 1+\frac{t}{\sqrt{n}}\bigg)^ne^{-\sqrt{n}t}dt.$$
+
+\section{Convergence of $\phi_n$}
+
+\noindent Consider the family of functions $\phi_n$ defined for all $t\in\mathbb{R}$ as
+
+\[ \phi_n (t) = \begin{cases}
+  \big( 1+\frac{t}{\sqrt{n}}\big)^ne^{-\sqrt{n}t}, & \mbox{ if $ t>-\sqrt{n} $}\\
+  0, & \mbox{ if $ t \leq -\sqrt{n} $}
+  \end{cases}
+  \]
+\noindent The graph of $\phi_n$ for some values of $n$, shown in Figure \ref{fig:Figure 1}, suggests that
+
+$$\bigg( 1+\frac{t}{\sqrt{n}}\bigg)^ne^{-\sqrt{n}t}\longrightarrow{}e^{\frac{-t^2}{2}} \hspace{3mm} \text{as}\hspace{3mm} n\to\infty.$$
+
+\noindent Namely, that $\phi_n$ converges to a certain function, which we will call $\phi$, as $n$ grows. The following step will aim to prove this intuition.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.35]{geogebra-export.pdf}
+    \caption{Graph of $\phi$ (dashed) and $\phi_n$ for $n=1,2,3,100$.}
+    \label{fig:Figure 1}
+\end{figure}
+
+\vspace{3mm}
+
+\noindent {\bf Theorem 3.1} \textit{For every $t\in\mathbb{R}$, $\phi_n\to\phi$ pointwise as $n\to\infty$.}
+
+\vspace{3mm}
+
+\noindent \textit{Proof.} In order to prove the pointwise convergence of $\phi_n$, we will first examine the convergence of $\log(\phi_n)$ as $n$ grows via Taylor expansion. Since $t$ is fixed, we can consider a large enough $n$, so that $\sqrt{n}>|t|$. We then have $$\phi_n(t)=\bigg( 1+\frac{t}{\sqrt{n}}\bigg)^ne^{-\sqrt{n}t}.$$ Taking the natural logarithm in both sides of the equation and applying the logarithm rules, we can see that $$\log(\phi_n(t))=n \hspace{1mm}\log\bigg(1+\frac{t}{\sqrt{n}}\bigg)-\sqrt{n}t.$$ It is easy to show that the Taylor expansion of the logarithm $$\log(1+x)=x-\frac{x^2}{2}+\frac{x^3}{3}-\frac{x^4}{4}+\dots$$ 
+
+\noindent converges if and only if $-1<x\leq1$. Let us now consider the following inequality $$\big|\log(1+x)-(x-x^2/2)\big|\leq M\frac{|x|^3}{3}$$ where $M$ is a constant. Although not strictly necessary for the proof, we can easily show that $M=2$ when $|x|\leq 1/2$. If $|x|\leq1/2$, then $$\big|\log(1+x)-(x-x^2/2)\big|\hspace{1mm}\leq\hspace{1mm}\sum_{k=3}^\infty\frac{|x|^k}{k}\hspace{1mm}\leq\hspace{1mm}\frac{1}{3}\sum_{k=3}^\infty |x|^k\hspace{1mm}\leq\hspace{1mm}\frac{1}{3}\hspace{1mm}\frac{|x|^3}{1-|x|}\hspace{1mm}\leq\hspace{1mm}\frac{2}{3}|x|^3$$ where we used the geometric series formula \cite{r4}. Therefore, if we choose $|x|\leq1/2$ we find ourselves in an interval where the Taylor series converges and, moreover, the constant that controls the terms of order greater or equal than 3 is known. If we consider $n>4t^2$, then $|t/\sqrt{n}|<1/2$. Now set $x=t/\sqrt{n}$ to see that 
+
+\begin{equation}
+\label{1}
+    \bigg|\log\bigg(1+\frac{t}{\sqrt{n}}\bigg)-\bigg(\frac{t}{\sqrt{n}}-\frac{(t/\sqrt{n})^2}{2}\bigg)\bigg|\leq \frac{2}{3}\hspace{1mm}\bigg|\frac{t}{\sqrt{n}}\bigg|^3\xrightarrow{n\to\infty}0
+\end{equation}
+
+\vspace{3mm}
+
+\noindent To end the proof, consider 
+
+\begin{align*}
+    \bigg|\log(\phi_n(t))-\bigg(\frac{-t^2}{2}\bigg)\bigg|&=\bigg|n\log\bigg(1+\frac{t}{\sqrt{n}}\bigg)-\sqrt{n}t+\frac{t^2}{2}\bigg|\\
+    &=n\bigg|\log\bigg(1+\frac{t}{\sqrt{n}}\bigg)-\frac{t}{\sqrt{n}}+\frac{(t/\sqrt{n})^2}{2}\bigg|\\
+    &\leq\frac{2}{3}\hspace{1mm}\bigg|\frac{t^3}{\sqrt{n}}\bigg|\to 0
+\end{align*}
+
+
+\noindent where we used Equation \ref{1}. It follows that, as $n\to\infty$, $$\log(\phi_n(t))\to-t^2/2$$ or equivalently, $$\phi_n(t)\to e^{-t^2/2}.$$
+\qed
+
+\vspace{4mm}
+
+\section{The Dominated Convergence Theorem (DCT)}
+
+\noindent We have proved the pointwise convergence of $\phi_n$. Note that, in order to complete the proof of Stirling's formula, it is necessary to show that $$\int_{-\infty}^\infty\phi_n(t)\,dt\hspace{1mm}\xrightarrow{\hspace{1mm}n\to\infty\hspace{1mm}}\hspace{1mm}\int_{-\infty}^\infty e^{-t^2/2}\,dt.$$ For pointwise convergence, it is not generally true that, for arbitrary functions $f_n, f$ and an arbitrary interval $E$, if $f_n\to f$ then $\int_E f_n\to \int_E f$ as $n\to\infty$. Despite this, the Dominated Convergence Theorem (DCT) is a tool that tells us under which conditions the last statement is true. 
+
+\vspace{3mm}
+
+\noindent This section will include a proof of the DCT for Riemann integrals \cite{r6}. Although the DCT is often proved for Lebesgue integrals, for the sake of conciseness, this report will not incorporate an introduction to Lebesgue integration or measure theory, which would otherwise be needed to prove the DCT. Let us now introduce some definitions that will be needed for the proof.
+
+\vspace{5mm}
+
+\noindent\textbf{Definition.} A family of real functions $f_n$ is \textit{uniformly bounded} \textit if there exists $M\in\mathbb{R}$ such that$$|f_n(x)|\leq M\hspace{6mm}\forall x\in\mathbb{R}, \hspace{2mm}\forall n\in\mathbb{N}.$$
+
+\vspace{5mm}
+
+\noindent\textbf{Definition.} Given a set $E$, we say that $E$ is a \textit{simple set} if it can be expressed as the disjoint union of finitely many closed intervals. Analogously, there exists some $N$ such that $$E=\bigcup_{i=1}^NE_i\hspace{4mm}\text{where for any $1\leq i,j\leq N$ such that $i\neq j$},\hspace{3mm}E_i\cap E_j=\varnothing.$$ We will denote by $|E|$ the \textit{length} of $E$, namely, the sum of the lengths of the intervals whose disjoint union defines $E$.
+
+\vspace{5mm}
+
+\noindent\textbf{Definition.} Let $f, g:A\to B$ be functions. It is said that $g$ \textit{dominates} $f$ if for every $x\in A$, $$f(x)\leq g(x).$$
+
+\noindent We will first proof the DCT for a bounded interval in order to then generalise it to the unbounded case. It is necessary to proof two lemmas that will help us build up towards the main theorem. 
+
+\vspace{5mm}
+
+\noindent\textbf{Lemma 4.1.} Let $\{E_n\}$ be a sequence of simple sets in $[a,b]$ and suppose there exists a $\delta>0$ such that $|E_n|>\delta$ for all $n$. Then there exists a $t\in[a,b]$ such that $t$ belongs in a countably infinite amount of $E_n$.
+
+\vspace{5mm}
+
+\noindent\textit{Proof}. The first step of the proof involves proving that there exists a subsequence $\{E_{n_k}\}$ and a positive number $\delta_0$ such that $$|E_{n_1}\cap E_{n_k}|>\delta_0 \hspace{3mm}\text{for all k.}$$ For the sake of contradiction, suppose that such a subsequence and such a number are nowhere to be found. Let's start with the first set $E_1$. In particular, $E_1$ is not the first element of such a subsequence, since we have assume that such a subsequence does not exist. This assumption implies that given $\delta_2>0$, we are left with finitely many $n>1$ such that $|E_1\cap E_n|\geq\delta_2$. Removing these finitely many $E_n$ from our original sequence leaves us with a subsequence that we will relabel as $\{E_n\}$. Notice that this subsequence is such that $$|E_1\cap E_n|<\delta_2 \hspace{2mm}\text{for all}\hspace{2mm} n\geq2,$$ as we have discarded the finitely many $n$ for which we have the opposite inequality. Proceed by considering the sets $E_1$ and $E_2$. In the first iteration we have discarded the finitely many sets for which $|E_1\cap E_n|\geq\delta_2$. Do the same with the finitely many sets that satisfy $|E_1\cap E_n|\geq\delta_3$ or $|E_2\cap E_n|\geq\delta_3$. We are then left with the $n$ for which $$|E_j\cap E_n|<\delta_3 \hspace{2mm}\text{for}\hspace{2mm} j=1,2 \hspace{2mm}\text{and}\hspace{2mm} n\geq3.$$ We shall iterate this process inductively until we have considered all sets from $E_1$ up to $E_{n-1}$ and discarded all the according $n$ to end up with a subsequence $\{E_n'\} \subseteq \{E_n\}$ such that $$|E_j'\cap E_n'|<\delta_n \hspace{2mm} \text{for all} \hspace{2mm} j<n.$$ The following reasoning makes it clear that we have found a contradiction. Since we find ourselves inside a bounded interval, it is obvious that 
+\begin{equation}
+\label{3}
+    \bigg|\bigcup_{n=1}^NE_n'\bigg|\leq b-a.
+\end{equation}
+Besides this, if we define the $j$-th delta we used in our argument to be $\delta_j=2^{-j}$ where $2\leq j$ together with reconsidering the finite union of the first $N$ elements of $\{E_n'\}$, we can see that 
+
+\begin{align*}
+    \bigg|\bigcup_{n=1}^NE_n'\bigg|&=|E_1'|+\bigg|\bigcup_{n=2}^NE_n'\bigg|-\bigg|\bigcup_{n=2}^NE_1'\cap E_n'\bigg|\\
+    &>|E_1'|+\bigg|\bigcup_{n=2}^NE_n'\bigg|-\sum_{n=2}^N2^{-n}\\
+    &>|E_1'|+\bigg|\bigcup_{n=2}^NE_n'\bigg|-\frac{1}{2}.
+\end{align*}
+
+\noindent Above, the last inequality is based on the fact that we have defined the $j$-th delta in such a way so that the addition of finitely many deltas has the structure of a geometric sum. Having this in mind and repeating this process, we obtain $$\bigg|\bigcup_{n=1}^NE_n'\bigg|>\sum_{n=1}^N|E_n'|-\sum_{k=1}^{N-1}2^{-k}>N\delta-1.$$ This clearly contradicts (\ref{3}), since the lower bound we have just found diverges as we let $N$ grow, so it will eventually escape the interval, which is not possible according to (\ref{3}). We have found a contradiction, which means we have proved the existence of the desired subsequence $\{E_n'\}$ and the desired $\delta_0$.
+
+\vspace{3mm}
+
+\noindent For the next step of the proof, we will construct a subsequence $\{E_n''\}\subseteq\{E_n\}$ such that $$\bigcap_{k=1}^nE_k''\neq\varnothing\hspace{2mm} \text{for all}\hspace{2mm}n.$$ Let $\{E_{n_k}\}$ and $\delta_0$ be the subsequence and positive number whose existence we have just proved. Let us rename $\{E_{n_k}\}$ as $\{E_n\}$ and set $E_1'':=E_1$. Our goal is to find $E_2''$, $E_3''$ and so on in order to build the full subsequence. Suppose $E_1=\bigcup_{k=1}^NI_k$. We can express $E_1$ in such a way by the definition of a simple set, since we assume $E_1$ is a simple set. Note that we have $N$ intervals and a countably infinite amount of $n$ to assign to each interval. This means that, for each $n$, there exists a $k\in\{1,2,...,N\}$ such that $$|E_n\cap I_k|>\frac{\delta_1}{N}.$$ By the pigeonhole principle adapted to infinite sets, we know there exists a $k_0\in\{1,2,...,N\}$ and a subsequence $\{E_{n_j}\}$ such that $$|E_{n_j}\cap I_{k_0}|>\frac{\delta_1}{N}\hspace{3mm}\text{for all}\hspace{3mm} j\in\mathbb{N}.$$ By relabeling the sequence we just found, we can consider 
+$$|E_n\cap I_1|>\delta_1>0\hspace{2mm}\text{for all}\hspace{2mm}n.\footnote{Although we will use $\delta$ to denote the lower bounds, the definition we previously used will no longer be employed.}$$ 
+
+\vspace{2mm}
+
+\noindent Realise that $\{I_1\cap E_n\}_{n=2}^\infty$ is a similar sequence as the one we worked with in the begining of the proof, therefore we shall repeat the argument we built aiming to obtain a sequence $\{E_{n_k}\}_{k=1}^\infty$ such that 
+
+$$|I_1\cap E_{n_1}\cap E_{n_k}|>\delta_2>0\hspace{2mm}\text{for all}\hspace{2mm} k.$$ 
+
+\vspace{2mm}
+
+\noindent Now let $E_2'':=E_{n_1}$. It is clear that $|E_1''\cap E_2''|>\delta_2>0$, hence their intersection is non-empty. By the definition of a simple set, we can give $E_2''\cap I_1$ as the union $\bigcup_{k=1}^MJ_k$. This motivates us to consider $\{I_1\cap J_1\cap E_{n_k}\}$ as the sequence of simple closed sets in $I_1\cap J_1$ all of which have lengths bounded below by $\delta_3>0$. Iterate this process to find $E_3''$, $E_4''$ and so on. The way we constructed the subsequence $\{E_n''\}$ ensures that $\bigcap_{k=1}^nE_k''\neq \varnothing$ for all $n$.
+
+\vspace{3mm}
+
+\noindent For the final step of the proof, our goal is to find the point $t\in[a,b]$ that belongs to countably infinitely many of the sets in the original sequence $\{E_n\}$. We will approach this part of the proof by considering the subsequence $\{E_n''\}$ which we previously built. It is enough to show that we can find a point $t\in[a,b]$ in the intersection of the countably infinite number of sets forming $\{E_n''\}$, namely, we must show that $$\bigcap_{n=1}^\infty E_n''\neq\varnothing.$$ One of the reasons we have constructed $\{E_n''\}$ in such a way is so that the sequence of the finite intersections of $E_n''$ is what we call a decreasing nested sequence of non-empty compact sets. Informally, this means that the sets in $H_n:=\bigcap_{k=1}^nE_k''$ get smaller while we move along the sequence, but it is preserved that each element is a subset of the previous. If we combine this observation with the compactness of $[a,b]$,   we find ourselves meeting the requirements of the Cantor Intersection Theorem \cite{r7}. This theorem ensures that the intersection is non-empty, hence the proof is complete.
+\qed
+
+
+\vspace{5mm}
+
+\noindent\textbf{Lemma 4.2.} Let $g_n\geq 0$ be a uniformly bounded family of non-negative functions converging pointwise to 0. Then $$\lim_{n\to\infty}\int_a^bg_n(t)dt=0.$$
+
+\noindent\textit{Proof}. Let $M$ be the uniform bound of $g_n$, and choose $\epsilon>0$. Proving the lemma is equivalent to showing that there exists an integer $n_0$ such that for all $n\geq n_0$, 
+
+\begin{equation}
+\label{2}
+    \int_a^bg_n\leq \epsilon.
+\end{equation}
+
+\noindent Let us assume the contrary in order to find a contradiction. Suppose that such an $n_0$ does not exist. This implies that (\ref{2}) fails for an infinite amount of $n$. Moreover, let's discard all the $g_n$ for those $n$ which happen to satisfy (\ref{2}). Thus we assume for contradiction that (\ref{2}) fails for all $n$.
+
+\vspace{2mm}
+
+\noindent Recall the notion of Riemann integrability to note that (\ref{2}) fails if and only if there exists a step function $s_n\leq g_n$ such that\footnote{It is safe to assume, without loss of generality, that $s_n\geq 0$.} $$\int_a^bs_n>\epsilon.$$ Now let us define $A_n:=\{t\in[a,b]:s_n(t)\geq\frac{\epsilon}{2(b-a)}\}$. The set $A_n$ is the finite union of intervals the sum of whose length $L$ must be strictly greater than $\delta:=\frac{\epsilon}{2M}$, since 
+
+\begin{align*}
+    \int_a^bs_n&=\int_{A_n}s_n+\int_{[a,b]\setminus A_n}s_n\hspace{1mm}\\
+    &\leq \int_{A_n}g_n+\int_{[a,b]\setminus A_n}\frac{\epsilon}{2(b-a)}\\
+    &\leq\int_{A_n}M+\frac{\epsilon}{2(b-a)}\cdot(b-a)\\
+    &\leq LM+\frac{\epsilon}{2}.
+\end{align*}
+
+\vspace{2mm}
+
+\noindent We can then see that $\epsilon<ML+\frac{\epsilon}{2}$, and therefore we know $$L>\frac{\epsilon}{2M}:=\delta.$$ If we now shrink the size of the sets $A_n$ to get rid of the potentially problematic points at the edges of the intervals, we obtain a subsequence of closed sets which we will call $B_n\subseteq A_n$ and still preserves the lower bound $\delta$, namely, $|B_n|>\delta$. According to Lemma 4.1, there exists some $t\in[a,b]$ such that $t\in B_n$ for a countably infinitely amount of $n$. From this fact it follows that 
+
+\vspace{2mm}
+
+$$g_n(t)\geq s_n(t)\geq \frac{\epsilon}{2(b-a)}$$ for countably infinitely many $n$. This clearly contradicts the fact that $g_n\to 0$ at the point $t$.
+\qed
+
+\vspace{4mm}
+
+\noindent\textbf{Theorem 4.3.} (Bounded Convergence Theorem). Let $f_n$ be a uniformly bounded sequence of Riemann integrable functions on $[a,b]$ converging pointwise to a Riemann integrable function $f$. Then $$\lim_{n\to\infty}\int_a^bf_n(t)dt\hspace{1mm}=\int_a^b\lim_{n\to\infty}f_n(t)dt\hspace{1mm}=\int_a^bf(t)dt.$$
+
+\noindent\textit{Proof}. Define $g_n=|f-f_n|$. Notice that $g_n\geq 0$ and $g_n\to0$ pointwise. By our assumption, if $f_n\leq M$ for all $n$, it is clear that $g_n\leq 2M$ for all $n$. We meet the requirements to summon Lemma 4.2 and conclude that $$\bigg|\int_a^bf_n(t)dt-\int_a^bf(t)dt\bigg|\leq\int_a^b|f_n(t)-f(t)|dt=\int_a^bg_n(t)dt\to 0.$$ It is then clear that, by the definition of convergence, we obtain the desired result.
+
+$$\int_a^bf_n(t)dt\hspace{1mm}\xrightarrow{\hspace{1mm}n\to\infty\hspace{1mm}}\hspace{1mm}\int_a^bf(t)dt.$$
+\qed
+
+\vspace{5mm}
+
+\noindent\textbf{Theorem 4.4.} (Dominated Convergence Theorem). Let $f_n$ be a sequence of integrable \footnote{Integrability here means Riemann integrability on every bounded interval, with an existent limit.} functions on $[0,\infty)$\footnote{It is safe to consider this interval. For symmetry reasons, we can consider $\mathbb{R}=(-\infty,0]\cup [0,\infty)$} that is dominated by an integrable function $g$. If $f_n$ converges pointwise to an integrable function $f$, then $$\lim_{n\to\infty}\int_0^\infty f_n(t)dt\hspace{1mm}=\int_0^\infty\lim_{n\to\infty}f_n(t)dt\hspace{1mm}=\int_0^\infty f(t)dt.$$
+
+\noindent\textit{Proof}. Let $\epsilon>0$ and $L$ be such that $$\int_L^\infty g<\frac{\epsilon}{3}.$$ It is a direct consequence of the assumption that $g$ dominates $f_n$ that $$\int_L^\infty |f_n|<\frac{\epsilon}{3} \hspace{4mm}\text{and}\hspace{4mm}\int_L^\infty |f|<\frac{\epsilon}{3}$$ for all $n$. By assumption, $g$ is a Riemann integrable function in every bounded interval, in particular, this means that $g$ is bounded in $[0,L]$. This clearly implies that $f_n$ is uniformly bounded in $[0,L]$. By Theorem 4.3, there exists an $N$ such that for every $n\geq N$ $$\bigg|\int_0^Lf_n-\int_0^Lf\bigg|<\frac{\epsilon}{3}.$$ Apply the triangle inequality in the following integral to complete the proof. $$\bigg|\int_0^\infty f_n-\int_0^\infty f\bigg|\leq\bigg|\int_0^L f_n-\int_0^L f\bigg|+\bigg|\int_L^\infty f_n-\int_L^\infty f\bigg|<\frac{\epsilon}{3}+\frac{\epsilon}{3}+\frac{\epsilon}{3}=\epsilon.$$
+\qed
+
+\vspace{4mm}
+
+\noindent It is time to go back to our original problem to check if we meet the requirements to use the DCT. One the one hand we need to determine whether $\phi$, $\phi_n$ are integrable functions on $[0,\infty)$. On the other hand we need to find a function that dominates $\phi$, $\phi_n$. We will start with the latter.
+
+\vspace{4mm}
+
+\noindent Define 
+
+\[ \psi(t) \hspace{0.5mm}=\hspace{0.5mm} \begin{cases}
+  e^{\frac{-t^2}{2}}, & \mbox{ if $ t<0 $}\\
+  (1+t)e^{-t}, & \mbox{ if $ t\geq 0 $}
+  \end{cases}
+  \]
+ 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.39]{dominaaaaaation.pdf}
+    \caption{Graph of $\psi$ dominating $\phi$ (dashed), $\phi_1$, $\phi_2$.}
+    \label{fig:domi}
+\end{figure}
+
+\noindent Figure \ref{fig:domi} suggests that $\psi$ works as a domination function for our problem. Let's check this intuition. We need to show that $$0\leq \phi_n(t)\leq \psi(t), \hspace{4mm} \forall n\in\mathbb{N}\hspace{3mm}\forall t\in\mathbb{R}.$$ Notice that $|\phi_n|=\phi_n$ for every natural $n$ and every real $t$. This makes the first inequality trivial. In order to prove the second inequality we need to examine all the possible cases carefully.
+
+\vspace{4mm}
+
+\noindent\textit{Case 1}. ($t<-\sqrt{n}$). Realise that, in this interval, $\phi_n(t)=0\hspace{2mm}\text{and}\hspace{2mm}\psi(t)=e^\frac{-t^2}{2}.$ The observation that $\psi>0$ makes it obvious that $$\phi_n<\psi.$$
+
+\noindent\textit{Case 2}. ($t>-\sqrt{n}$). Taking the logarithm, we need to check that $$\log\phi_n(t)\leq\log\psi(t) \hspace{3mm}\text{when}\hspace{3mm}t>-\sqrt{n}.$$ Notice we need to consider the following two sub-cases.
+
+\[
+   n\log\bigg(1+\frac{t}{\sqrt{ n}}\bigg)-\sqrt{n}t\hspace{2mm}\leq\hspace{2mm}\begin{cases}
+  \frac{-t^2}{2}, & \mbox{ if $ t<0 $}\\
+  \log(1+t)-t, & \mbox{ if $ t\geq 0 $}
+  \end{cases} 
+\]
+
+\vspace{2mm}
+
+\noindent\textit{Case 2.1}. ($-\sqrt{n}<t\leq0$). We need to show that $$n\log\bigg(1+\frac{t}{\sqrt{ n}}\bigg)-\sqrt{n}t+\frac{t^2}{2}\leq 0\hspace{3mm}\text{when}\hspace{1mm}-\sqrt{n}<t\leq0.$$ We will show that this difference is increasing in all of its domain while vanishing when $t=0$. This then implies that the expression is always negative, as we want to see. It is enough to take the derivative and see that it is always positive.
+
+\begin{align*}
+\frac{d}{dt}\bigg[n\log\bigg(1+\frac{t}{\sqrt{ n}}\bigg)-\sqrt{n}t+\frac{t^2}{2}\bigg]&=\frac{\sqrt{n}}{1+t/\sqrt{n}}-\sqrt{n}+t\\
+&=\frac{t^2}{t+\sqrt{n}}
+\end{align*}
+
+\noindent which is clearly positive when $-\sqrt{n}<t\leq0$.
+
+\vspace{4mm}
+
+\noindent\textit{Case 2.2}. ($t\geq0$). We will prove the last sub-case by arguing analogously. We need to show that $$n\log\bigg(1+\frac{t}{\sqrt{ n}}\bigg)-\sqrt{n}t-\log(1+t)+t\leq 0\hspace{3mm}\text{when}\hspace{2mm}t\geq0.$$ Since the expression equals $0$ when $t=0$, it is again enough to show that the expression increases in all of its domain. Taking the derivative, we can see that 
+
+\begin{align*}
+\frac{d}{dt}\bigg[n\log\bigg(1+\frac{t}{\sqrt{ n}}\bigg)-\sqrt{n}t-\log(1+t)+t\bigg]&=\frac{n}{\sqrt{n}+t}-\sqrt{n}-\frac{1}{1+t}+1\\
+&=\frac{t^2(\sqrt{n}-1)}{(t+1)(t+\sqrt{n})}.
+\end{align*}
+
+\noindent The expression we are left with is always positive in its $t$ domain only if $n>1$. Therefore it is necessary to consider the possibility of $n=1$. We can see that $$\log(1+t)-t+t-\log(1+t)=0\leq0$$ which is trivially true.
+
+\vspace{4mm}
+
+\noindent Once we have dissected every possible case, we can conclude that $\psi$ is a valid candidate for a dominating function in our problem. It is now our job to check the integrability of $\phi$, $\phi_n$. We will start with $\phi$.
+
+\vspace{4mm}
+
+\noindent $\phi$ is a continuous function in all $\mathbb{R}$ which, in particular, means that it is continuous in $[0,\infty)$. Additionally, $\phi$ is bounded in every closed interval. Combining these two facts lets us say that $\phi$ is locally integrable in $[0,\infty)$. In order to show that it is also integrable in $[0,\infty)$, we need to show that all of its singularities have an existent limit. In our case, the only singularity we need to consider is when we approach $\infty$, so we need to check if $$\lim_{x\to\infty}\int_0^x\phi(t)dt\hspace{1mm}=\int_0^\infty e^{\frac{-t^2}{2}}dt<\infty.$$ Notice that for every $t>2$, $e^{-t}>e^{\frac{-t^2}{2}}$. This motivates us to use the comparison test with $e^{-t}$. In fact, $$\int_0^\infty e^{-t}dt=-e^{-t}\bigg|_0^\infty=1<\infty,$$ which concludes that $$\int_0^\infty \phi<\infty.$$
+
+\vspace{4mm}
+
+\noindent Applying the same reasoning, we can easily see that $\phi_n$ is locally integrable in $[0,\infty)$ for every $n\in\mathbb{N}$. Therefore we only need to check if the singularities of the integral have a finite limit. Again, we only have to consider the singularity that presents itself when we get close to $\infty$. We must show that $$\lim_{x\to\infty}\int_0^x\phi_n(t)dt\hspace{1mm}=\int_0^\infty\bigg(1+\frac{t}{\sqrt{n}}\bigg)^ne^{-\sqrt{n}t}dt<\infty\hspace{3mm}\forall n\in\mathbb{N}.$$ This follows from the observation that, for $t\geq0$, $$\psi(t)\geq\phi_n(t)\hspace{3mm}\forall n\in\mathbb{N}.$$ Since $\psi$ is also a locally integrable function with the same singularity as $\phi_n$, according to the comparison test, it is enough to prove that the integral of $\psi$ converges. We will approach this with integration by parts.
+
+\vspace{3mm}
+
+\noindent Let $u=(1+t)$ and $dv=e^{-t}dt$. Differentiate and integrate respectively to see that $du=dt$ and $v=-e^{-t}$. Therefore, 
+
+\begin{align*}
+    \int_0^\infty (1+t)e^{-t}dt&= uv\bigg|_0^\infty-\int_0^\infty vdu\\
+&=\frac{-(1+t)}{e^t}\bigg|_0^\infty-\int_0^\infty-e^{-t}dt\\
+&=1+\bigg[\frac{-1}{e^t}\bigg]_0^\infty\\
+&=2.
+\end{align*}
+
+\noindent We are now able to summon the DCT with the functions $\psi$, $\phi$, $\phi_n$ to finally conclude that $$\int_{-\infty}^\infty \phi_n\hspace{1mm}\to\hspace{1mm}\int_{-\infty}^\infty\phi.$$
+
+\vspace{4mm}
+
+
+\section{The Gaussian Integral}
+
+\noindent For the last step to complete the proof of Stirling's formula, we need to determine the finite value that the sequence of integrals of $\phi_n$ converges to, namely, we need to solve the following integral: $$I=\int_{-\infty}^\infty\phi=\int_{-\infty}^\infty e^{-t^2/2}\,dt.$$ This is a very well known result in mathematics, known as the Gaussian integral \cite{r9}. We will use Poisson's approach. Siméon Denis Poisson (1781--1840) was a French mathematician who solved this integral using a unique method that got popularised in the 19th century and is now one of the most commonly used proof of the Gaussian integral \cite{r10}. 
+
+\vspace{5mm}
+
+\noindent {\bf Theorem 5.1.} (Gaussian integral)\footnote{There exist other formulations of the Gaussian integral, but they only differ in constant terms.}$$I=\int_{-\infty}^\infty e^{-x^2/2}\,dx=\sqrt{2\pi}.$$
+
+\newpage
+
+\noindent\textit{Proof}. Consider 
+\begin{align*}
+    I^2&=\int_{-\infty}^\infty e^{-x^2/2}\,dx\int_{-\infty}^\infty e^{-y^2/2}\,dy\\
+    &=\int_{-\infty}^\infty \bigg(\int_{-\infty}^\infty e^{-x^2/2}\,dx\bigg)e^{-y^2/2}\,dy\\
+    &=\int_{-\infty}^\infty\int_{-\infty}^\infty e^{-(x^2+y^2)/2}\,dx\,dy.
+\end{align*}
+
+\vspace{1,5mm}
+
+\noindent By Fubini's Theorem, we can consider these iterated integrals as a double integral in the first two quadrants of the plane. Formally, if we let $A=\mathbb{R}^2$, then 
+
+$$I^2=\int_{-\infty}^\infty\int_{-\infty}^\infty e^{-(x^2+y^2)/2}\,dx\,dy=\iint_A e^{-(x^2+y^2)/2}\,dx\,dy.$$ 
+
+\vspace{1mm}
+
+\noindent The observation that $x^2+y^2=r^2$, where $r$ is the standard distance function in the plane, motivates us to use polar coordinates to rewrite $A$ as \[A=\{(r,\theta):r\geq0,\ 0\leq\theta\leq2\pi\}.\] The integral then becomes 
+\begin{align*}
+    I^2&=\int_{0}^{2\pi}\int_{0}^\infty e^{-r^2/2}dr\,rd\theta\\
+    &=\int_{0}^\infty r\,e^{-r^2/2}\,dr\int_{0}^{2\pi}d\theta\\
+    &=-e^{-r^2/2}\,\bigg|_{0}^\infty \cdot\, \theta\,\bigg|_{0}^{2\pi}\\
+    &=2\pi
+\end{align*}
+\noindent Finally, as $I>0$, it is clear that $I=\sqrt{2\pi}.$ \qed
+
+\vspace{4mm}
+
+\noindent Going back to the result of Lemma 2.2, we can finally conclude that $$\lim_{n\to\infty}\frac{n!\,e^n}{n^n\sqrt{n}}=\int_{-\infty}^\infty\phi(t)\,dt=\sqrt{2\pi}$$ By rearranging the terms in this expression, we are left with Stirling's formula: $$\lim_{n\to\infty}\frac{n!}{\sqrt{2\pi n}\big(\frac{n}{e}\big)^n}=1.$$
+
+\section*{Acknowledgements}
+
+\noindent I would like to express my deepest gratitude to Dr.$\,$Juha Lehrbäck for his implication with this project and for being a great person apart from being an excellent mathematician. I also wish to thank Dr.$\,$Albert Clop for making my trip to Jyväskylä possible and for his dedication as a tutor and as a professor. I am immensely thankful to the math department of the Jyväskylä University for their kindness and friendliness. Finally, I want to express my appreciation to La Fundació la Pedrera for funding my trip.
+
+\bibliographystyle{plain}
+\bibliography{References}
+\end{document}

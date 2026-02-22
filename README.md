@@ -8,3 +8,9 @@ This small paper explores an idea I had when studying Hamiltonian mechanics. The
 It would then be natural to identify all the points in a mechanical curve and collapse them into an equivalence class, yielding a new space (obtained from the phase space) which is called the Orbit Space. Here, each point corresponds to a kind of state of the sistem, we have *quotiented out time*.
 
 As it turns out, this is a more general geometrical construction on differential manifolds: a *foliation*. I cover some interesting examples.
+
+## 📈 An elementary proof of Stirling's formula
+
+Stirling's formula is an asymptotic approximation for the factorial function. This paper presents a proof of Stirling's formula that uses only elementary tools from analysis. It includes an introduction to the Gamma function, as well as a non–measure-theoretic proof of the Dominated Convergence Theorem.
+
+I wrote this in Jyväskylä, Finland, as part of a science talent program called Joves per la Ciència, organized by Fundació La Pedrera.
